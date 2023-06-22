@@ -1,5 +1,5 @@
 const corsObj = {
-  origin: ["https://the-widget-folks.netlify.app/"],
+  origin: ["https://the-widget-folks.netlify.app"],
   methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
   credentials: true,
 };
