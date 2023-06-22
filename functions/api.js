@@ -41,7 +41,7 @@ app.use((req, res, next) => {
   console.log(
     `Method: ${req.method} 
      Path: ${req.url}
-     Cookies: ${JSON.stringify(req.cookies)}`
+     Session: ${JSON.stringify(req.session)}`
   );
 
   next();
