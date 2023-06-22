@@ -6,7 +6,7 @@ var createError = require("http-errors");
 const cors = require("cors");
 const corsObj = require("./corsObj");
 const serverless = require("serverless-http");
-const PORT = process.env.PORT || 4000;
+// const PORT = process.env.PORT || 4000;
 const poolObj = require("./db");
 const store = new (require("connect-pg-simple")(session))({
   poolObj,
