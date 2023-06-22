@@ -41,7 +41,7 @@ app.use((req, res, next) => {
   console.log(
     `Method: ${req.method} 
      Path: ${req.url}
-     Session: ${JSON.stringify(req)}`
+     Session: ${JSON.stringify(req.user)}`
   );
 
   next();
