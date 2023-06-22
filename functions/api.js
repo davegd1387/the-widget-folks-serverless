@@ -40,7 +40,8 @@ function isNotLoggedIn(req, res, next) {
 app.use((req, res, next) => {
   console.log(
     `Method: ${req.method} 
-     Path: ${req.url}`
+     Path: ${req.url}
+     Cookies: ${JSON.stringify(req.cookies)}`
   );
 
   next();
