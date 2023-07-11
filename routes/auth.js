@@ -4,7 +4,6 @@ const { emailExists, createUser } = require("../functions/controller");
 const router = express.Router();
 const passport = require("passport");
 require("../functions/authLocal");
-// const app = express();
 
 router.route("/local").post((req, res, next) => {
   console.log(`In /auth/login POST route callback`);
@@ -40,7 +39,6 @@ router.route("/local").post((req, res, next) => {
       // added below to cure situation of deserializeUser not firing due to redirect occuring before session save
       req.session.save(() => {
         return res.redirect(`/protected/user/${req.user.id}`);
-        // return res.redirect(`/protected/user/${req.user.id}`);
       });
     });
   })(req, res, next);

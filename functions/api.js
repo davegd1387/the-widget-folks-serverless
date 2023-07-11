@@ -21,7 +21,14 @@ const authRouter = require("../routes/auth");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use((req, res, next) => {
+  console.log(
+    `Method: ${req.method} 
+     Path: ${req.url}`
+  );
 
+  next();
+});
 function isLoggedIn(req, res, next) {
   console.log(
     `Inside isLoggedIn func: isAuth:${JSON.stringify(req.isAuthenticated())}`
@@ -37,15 +44,14 @@ function isNotLoggedIn(req, res, next) {
     : next();
 }
 
-app.use((req, res, next) => {
-  console.log(
-    `Method: ${req.method} 
-     Path: ${req.url}
-     Session: ${JSON.stringify(req.user)}`
-  );
+// app.use((req, res, next) => {
+//   console.log(
+//     `Method: ${req.method}
+//      Path: ${req.url}`
+//   );
 
-  next();
-});
+//   next();
+// });
 
 app.set("view-engine", "ejs");
 app.use("/static", express.static(path.join(__dirname, "public")));
@@ -85,10 +91,10 @@ app.options("/*", function (req, res, next) {
 //end: http://johnzhang.io/options-request-in-express
 
 app.use("/protected", isLoggedIn, protectedRouter);
-app.use("/auth", isNotLoggedIn, authRouter);
+app.use("/auth", authRouter);
+// app.use("/auth", isNotLoggedIn, authRouter);
 app.use("/items", itemsRouter);
-app.use("/", isNotLoggedIn, indexRouter);
-// app.use("/.netlify/functions/api", isNotLoggedIn, indexRouter);
+// app.use("/", isNotLoggedIn, indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

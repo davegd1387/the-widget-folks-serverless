@@ -182,6 +182,42 @@ const createUser = async (
   return data.rows[0];
 };
 
+const createSale = async (
+  saleDate,
+  amount,
+  tax,
+  taxStatus,
+  custId,
+  saleItems
+) => {
+  let data = [];
+  const saleData = await pool.query(queries.addSale, [
+    saleDate,
+    amount,
+    tax,
+    taxStatus,
+    custId,
+  ]);
+  const saleId = saleData.rows[0].id;
+  data.push(saleId);
+  console.log(`inside createSale - saleId: ${JSON.stringify(saleId)}`);
+  let items = [];
+  for (let x in saleItems) {
+    const { itemId, quantity } = saleItems[x];
+    const saleItemData = await pool.query(queries.addSaleItems, [
+      saleId,
+      itemId,
+      quantity,
+    ]);
+    const saleItemId = saleItemData.rows[0].items_id;
+    console.log(`               - saleItemId:${JSON.stringify(saleItemId)}`);
+    items.push(saleItemId);
+  }
+  data.push(items);
+  if (data.rowCount == 0) return false;
+  return data;
+};
+
 const matchPassword = async (password, hashPassword) => {
   const match = await bcrypt.compare(password, hashPassword);
   return match;
@@ -198,5 +234,6 @@ module.exports = {
   getSalesByCustId,
   emailExists,
   createUser,
+  createSale,
   matchPassword,
 };

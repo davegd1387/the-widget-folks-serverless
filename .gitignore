@@ -1,7 +1,10 @@
 # Local Netlify folder
 .netlify
+
+views/register.ejs
 node_modules
 sql
 test-utils
 .env
 old.env
+

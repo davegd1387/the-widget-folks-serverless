@@ -29,9 +29,10 @@ const queryAllItems =
     FROM items ORDER BY id ASC";
 const querySalesByCustId =
   "SELECT sale_date, amount, tax, tax_status, sales.id\
-     FROM customers,sales\
-     WHERE customers.id = sales.cust_id\
-     AND customers.id = $1";
+     FROM users,customers,sales\
+     WHERE customers.id = users.customer_id\
+     AND customers.id = sales.cust_id\
+     AND users.id = $1";
 const queryEmail =
   "SELECT id, email, isadmin, password FROM users WHERE email=$1";
 const queryUserId = "SELECT id, email, customer_id FROM users WHERE id=$1";
@@ -46,6 +47,10 @@ const addCustomer =
    tc_id AS(INSERT INTO cust_telephone(customer_id, telephone_id) VALUES ((SELECT customer_id FROM cc_id), (SELECT id FROM t_id)) RETURNING customer_id),\
    ec_id AS(INSERT INTO emails(email, customer_id) VALUES ($1,(SELECT customer_id FROM tc_id)) RETURNING customer_id)\
   INSERT INTO users(email, password, customer_id) VALUES ($1, $2, (SELECT customer_id FROM ec_id)) RETURNING id, email, password";
+const addSale =
+  "INSERT INTO sales(sale_date, amount, tax, tax_status, cust_id) VALUES($1, $2, $3, $4, $5) RETURNING id";
+const addSaleItems =
+  "INSERT INTO sales_items(sales_id, items_id, quantity) VALUES ($1, $2, $3) RETURNING items_id";
 const deleteUserCustomer =
   "WITH del AS (SELECT CAST($1 AS int)AS c_id),\
 dels1 AS (DELETE FROM cust_address USING del WHERE customer_id = del.c_id RETURNING address_id, cust_address.id AS ca_id),\
@@ -72,4 +77,6 @@ module.exports = {
   addCustomer,
   deleteUserCustomer,
   updateUserEmail,
+  addSale,
+  addSaleItems,
 };
